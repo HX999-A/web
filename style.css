@@ -1,0 +1,173 @@
+/* 基础变量：集中管理页面的颜色与尺寸 */
+:root {
+  --page-bg: #eef2f3;
+  --card-bg: #ffffff;
+  --primary: #1f2933;
+  --secondary: #66737d;
+  --muted: #93a0a8;
+  --line: #e7ecee;
+  --accent: #d47a5d;
+  --shadow: 0 20px 45px rgba(31, 41, 51, 0.12);
+}
+
+/* 统一盒模型并移除浏览器默认间距 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--primary);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.9), transparent 32%),
+    linear-gradient(135deg, #f5f7f6 0%, var(--page-bg) 100%);
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 页面容器负责让名片在桌面和移动端都保持居中 */
+.page-shell {
+  display: grid;
+  min-height: 100vh;
+  padding: 32px 20px;
+  place-items: center;
+}
+
+/* 名片主体：12px 圆角与柔和阴影 */
+.profile-card {
+  width: min(100%, 390px);
+  padding: 42px 36px 34px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform 240ms ease, box-shadow 240ms ease;
+}
+
+/* 鼠标悬停时轻微上浮，触摸设备不会受到影响 */
+@media (hover: hover) {
+  .profile-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 26px 52px rgba(31, 41, 51, 0.16);
+  }
+}
+
+/* 头像与加载失败后的文字占位保持相同尺寸 */
+.avatar,
+.avatar-fallback {
+  display: block;
+  width: 112px;
+  height: 112px;
+  margin: 0 auto 25px;
+  border-radius: 50%;
+}
+
+.avatar {
+  object-fit: cover;
+  border: 6px solid #f2f5f4;
+}
+
+.avatar-fallback {
+  display: grid;
+  color: #ffffff;
+  background: var(--accent);
+  font-size: 42px;
+  font-weight: 600;
+  place-items: center;
+}
+
+.profile-info {
+  padding-bottom: 27px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.role {
+  margin: 8px 0 0;
+  color: var(--secondary);
+  font-size: 15px;
+}
+
+.bio {
+  margin: 18px auto 0;
+  max-width: 270px;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* 联系方式使用整行可点击区域，方便移动端操作 */
+.contact-list {
+  display: grid;
+  gap: 15px;
+  margin: 25px 0 0;
+  font-style: normal;
+  text-align: left;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+  color: var(--secondary);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.contact-item:hover {
+  color: var(--accent);
+}
+
+.contact-item > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-icon {
+  display: inline-grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--accent);
+  background: #fbf0eb;
+  font-size: 12px;
+  font-weight: 700;
+  place-items: center;
+}
+
+@media (max-width: 420px) {
+  .profile-card {
+    padding: 34px 24px 28px;
+  }
+}
+
+/* 尊重用户的系统级动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .profile-card,
+  .contact-item {
+    transition: none;
+  }
+}
