@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成都 · 天府之国 | 有声视频体验</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+
+        /* 头部 / 英雄区 */
+        .hero {
+            position: relative;
+            height: 85vh;
+            min-height: 560px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.55;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(15,15,15,0.9) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 24px;
+        }
+
+        .hero-content .tag {
+            display: inline-block;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #d4a373;
+            border: 1px solid rgba(212, 163, 115, 0.5);
+            padding: 6px 18px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: #ffffff;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+            margin-bottom: 16px;
+        }
+
+        .hero-content h1 span {
+            color: #d4a373;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 1.8vw, 1.25rem);
+            max-width: 640px;
+            margin: 0 auto 32px;
+            color: #c8c8c8;
+            font-weight: 300;
+        }
+
+        .sound-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #a0a0a0;
+            background: rgba(255,255,255,0.06);
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .sound-hint .icon {
+            font-size: 18px;
+        }
+
+        /* 通用版块 */
+        section {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .section-header h2::after {
+            content: '';
+            display: block;
+            width: 48px;
+            height: 3px;
+            background: #d4a373;
+            margin: 16px auto 0;
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            color: #888;
+            font-size: 15px;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* 视频卡片网格 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .video-card {
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-6px);
+            border-color: #d4a373;
+        }
+
+        .video-wrapper {
+            position: relative;
+            background: #000;
+            aspect-ratio: 16 / 9;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* 自定义音量提示层 */
+        .audio-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            pointer-events: none;
+            z-index: 3;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .video-info {
+            padding: 20px 22px 24px;
+        }
+
+        .video-info h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #f0f0f0;
+            margin-bottom: 8px;
+        }
+
+        .video-info p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        /* 文化亮点三栏 */
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .highlight-item {
+            background: #141414;
+            border-radius: 14px;
+            padding: 32px 28px;
+            border-left: 3px solid #d4a373;
+            transition: background 0.3s;
+        }
+
+        .highlight-item:hover {
+            background: #1c1c1c;
+        }
+
+        .highlight-item .emoji {
+            font-size: 32px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .highlight-item h4 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .highlight-item p {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 48px 24px;
+            color: #555;
+            font-size: 13px;
+            border-top: 1px solid #1f1f1f;
+            margin-top: 20px;
+        }
+
+        footer span {
+            color: #d4a373;
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                height: 75vh;
+                min-height: 480px;
+            }
+            section {
+                padding: 56px 18px;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 英雄区：带声音的视频背景 -->
+    <header class="hero">
+        <!-- 示例视频带有清晰的环境音与配乐，用于演示“播放时有声音” -->
+        <video class="hero-video" autoplay muted loop playsinline id="heroVideo">
+            <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+            <!-- 替换建议：将 src 换为你自己的成都视频直链（需包含音轨） -->
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="tag">CHENGDU · 天府之国</div>
+            <h1>成都，<span>带得走的声音</span></h1>
+            <p>锦里灯火、盖碗茶香、火锅沸腾的夜晚。打开下方任意视频，感受这座城市真实的环境声响。</p>
+            <div class="sound-hint">
+                <span class="icon">🔊</span>
+                播放视频时请开启音量，体验成都的声音切片
+            </div>
+        </div>
+    </header>
+
+    <!-- 视频展映区 -->
+    <section>
+        <div class="section-header">
+            <h2>声音里的成都</h2>
+            <p>每一段画面都带有现场收音或环境音轨，点击播放即可聆听</p>
+        </div>
+
+        <div class="video-grid">
+
+            <!-- 视频卡片 1 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="audio-badge">🔊 有声</div>
+                    <!-- 示例视频：MDN 提供的 CC0 视频，包含清晰音轨 -->
+                    <video controls preload="metadata" playsinline>
+                        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                        你的浏览器不支持 HTML5 video 标签。
+                    </video>
+                </div>
+                <div class="video-info">
+                    <h3>锦里 · 夜雨与灯笼</h3>
+                    <p>雨滴落在青石板上的细响，混着远处小贩的吆喝。成都的夜，从来不安静，只是慢。</p>
+                </div>
+            </div>
+
+            <!-- 视频卡片 2 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="audio-badge">🔊 有声</div>
+                    <video controls preload="metadata" playsinline>
+                        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info">
+                    <h3>火锅 · 沸腾的烟火</h3>
+                    <p>牛油翻滚，毛肚七上八下。成都火锅店里的喧哗与锅底的咕嘟声，是这座城市最热烈的背景音。</p>
+                </div>
+            </div>
+
+            <!-- 视频卡片 3 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="audio-badge">🔊 有声</div>
+                    <video controls preload="metadata" playsinline>
+                        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info">
+                    <h3>熊猫基地 · 咀嚼与风</h3>
+                    <p>竹叶被咬断的清脆声响，饲养员轻声的呼唤。成都大熊猫繁育基地的午后，治愈而真实。</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 文化亮点 -->
+    <section style="padding-top: 0;">
+        <div class="section-header">
+            <h2>不止于声音</h2>
+            <p>成都的日常，藏在茶馆、街巷与舌尖之间</p>
+        </div>
+        <div class="highlights">
+            <div class="highlight-item">
+                <span class="emoji">🍵</span>
+                <h4>盖碗茶与竹椅</h4>
+                <p>人民公园的鹤鸣茶社，掺茶师傅的长嘴壶划出弧线，茶碗碰撞的轻响就是成都的节奏。</p>
+            </div>
+            <div class="highlight-item">
+                <span class="emoji">🌶️</span>
+                <h4>麻辣鲜香</h4>
+                <p>从串串到冒菜，从兔头到甜水面。成都的味道，在舌尖跳动，也在街头巷尾的灶火声中蔓延。</p>
+            </div>
+            <div class="highlight-item">
+                <span class="emoji">🐼</span>
+                <h4>熊猫故乡</h4>
+                <p>大熊猫繁育研究基地里，熊猫嚼竹子的咔嚓声、幼崽的轻哼，是成都最柔软的声音名片。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        成都 · 天府之国 &nbsp;|&nbsp; 本页面使用 <span>HTML5 Video</span> 播放带音轨的视频 &nbsp;|&nbsp; 示例素材来自 MDN CC0 视频库
+    </footer>
+
+    <script>
+        // 英雄区背景视频：浏览器可能阻止自动播放声音，因此默认静音自动播放。
+        // 用户点击页面任意位置后，尝试解除静音并提升音量，让“背景”也有声音。
+        (function() {
+            const heroVideo = document.getElementById('heroVideo');
+            if (!heroVideo) return;
+
+            // 设置适中的音量
+            heroVideo.volume = 0.45;
+
+            function enableHeroSound() {
+                // 如果用户已经与页面交互，取消静音并继续播放
+                if (heroVideo.muted) {
+                    heroVideo.muted = false;
+                    heroVideo.play().catch(function() {});
+                }
+            }
+
+            // 首次点击/触摸页面时启用声音
+            ['click', 'touchstart', 'keydown'].forEach(function(evt) {
+                document.addEventListener(evt, enableHeroSound, { once: true });
+            });
+
+            // 确保视频循环播放
+            heroVideo.addEventListener('ended', function() {
+                heroVideo.currentTime = 0;
+                heroVideo.play().catch(function() {});
+            });
+        })();
+
+        // 为所有内容视频设置一个舒适的音量（0.8），避免默认音量过大或过小
+        document.querySelectorAll('.video-card video').forEach(function(vid) {
+            vid.volume = 0.8;
+        });
+    </script>
+</body>
+</html>
